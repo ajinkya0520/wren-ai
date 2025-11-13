@@ -1,0 +1,9 @@
+[root@cheux37oracleos7 kcg]# docker logs kcg-ibis-server-1
+Starting Ibis Server...
+WREN_NUM_WORKERS is not set. Using default value of 2.
+Number of workers: 2
+[2025-11-13 13:19:13 +0000] [6] [INFO] Starting gunicorn 23.0.0
+[2025-11-13 13:19:13 +0000] [6] [INFO] Listening at: http://0.0.0.0:8000 (6)
+[2025-11-13 13:19:13 +0000] [6] [INFO] Using worker: app.worker.WrenUvicornWorker
+[2025-11-13 13:19:13 +0000] [7] [INFO] Booting worker with pid: 7
+[2025-11-13 13:19:13 +0000] [8] [INFO] Booting worker with pid: 8
