@@ -1,0 +1,98 @@
+# -------------------------
+  # Wren AI (Engine + UI + AI Service)
+  # -------------------------
+  wren-bootstrap:
+    image: ghcr.io/canner/wren-bootstrap:latest
+    restart: on-failure
+    environment:
+      - DATA_PATH=/app/data
+    volumes:
+      - wren-data:/app/data
+    command: /bin/sh /app/init.sh
+    networks:
+      - wren
+
+  wren-engine:
+    image: ghcr.io/canner/wren-engine:latest
+    restart: on-failure
+    expose:
+      - "5555"      # engine API port (internal)
+      - "5556"      # SQL / engine port
+    volumes:
+      - wren-data:/usr/src/app/etc
+    networks:
+      - wren
+    depends_on:
+      - wren-bootstrap
+      - db
+
+  ibis-server:
+    image: ghcr.io/canner/wren-engine-ibis:latest
+    restart: on-failure
+    expose:
+      - "5560"
+    environment:
+      - WREN_ENGINE_ENDPOINT=http://wren-engine:5555
+    networks:
+      - wren
+    depends_on:
+      - wren-engine
+
+  qdrant:
+    image: qdrant/qdrant:v1.11.0
+    restart: on-failure
+    expose:
+      - "6333"
+    volumes:
+      - qdrant-data:/qdrant/storage
+    networks:
+      - wren
+
+  wren-ai-service:
+    image: ghcr.io/canner/wren-ai-service:latest
+    restart: on-failure
+    expose:
+      - "5557"
+    ports:
+      - "5557:5557"    # optional: exposes AI service to host
+    env_file:
+      - .env
+    environment:
+      - PYTHONUNBUFFERED=1
+      - CONFIG_PATH=/app/data/config.yaml
+    volumes:
+      - ./wren/config.yaml:/app/data/config.yaml:ro
+      - wren-data:/app/data
+    networks:
+      - wren
+    depends_on:
+      - wren-engine
+      - qdrant
+      - db
+
+  wren-ui:
+    image: ghcr.io/canner/wren-ui:latest
+    restart: on-failure
+    ports:
+      - "3000:3000"   # change if you already use 3000
+    environment:
+      - WREN_ENGINE_ENDPOINT=http://wren-engine:5555
+      - WREN_AI_ENDPOINT=http://wren-ai-service:5557
+      - DB_TYPE=sqlite
+      - SQLITE_FILE=/app/data/db.sqlite3
+      - GENERATION_MODEL=${GENERATION_MODEL:-gpt-4o}  # or set to local model
+    volumes:
+      - wren-data:/app/data
+    networks:
+      - wren
+    depends_on:
+      - wren-ai-service
+      - wren-engine
+
+networks:
+  wren:
+    driver: bridge
+
+volumes:
+  wren-data:
+  qdrant-data:
