@@ -1,0 +1,7 @@
+# from your compose directory
+docker compose run --rm --entrypoint env wren-ai-service | egrep -i 'PORT|UVICORN|APP_PORT|QDRANT|CLICKHOUSE' || true
+
+docker run --rm --entrypoint cat ghcr.io/canner/wren-ai-service:latest /app/entrypoint.sh | sed -n '1,240p'
+
+docker cp kcg-wren-ai-service-1:/app/entrypoint.sh ./entrypoint.sh && sed -n '1,240p' ./entrypoint.sh
+
