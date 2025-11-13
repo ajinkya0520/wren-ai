@@ -1,0 +1,18 @@
+# wren/config.yaml - minimal example to add ClickHouse
+server:
+  host: "0.0.0.0"
+
+connectors:
+  clickhouse:
+    - id: clickhouse_default
+      name: "ClickHouse (local)"
+      type: clickhouse
+      host: "db"           # hostname of your ClickHouse container in compose
+      port: 8123
+      username: "default"
+      password: ""         # leave blank if no password
+      database: "default"
+      protocol: http       # http or https
+      # optional: advanced params
+      # url_params:
+      #   send_compression: 1
