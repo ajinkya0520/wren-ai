@@ -1,0 +1,11 @@
+[root@cheux37oracleos7 kcg]# docker logs kcg-wren-ui-1
+Using SQLite
+model len:0
+Batch 1 run: 30 migrations
+  ▲ Next.js 14.2.10
+  - Local:        http://localhost:3000
+  - Network:      http://0.0.0.0:3000
+
+ ✓ Starting...
+ ✓ Ready in 1694ms
+[root@cheux37oracleos7 kcg]#
