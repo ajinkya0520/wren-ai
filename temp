@@ -1,5 +1,10 @@
-# show envs passed to the service (runs a one-off container, won't execute entrypoint)
-docker compose run --rm --entrypoint env wren-ai-service | egrep -i 'WREN_AI_SERVICE_PORT|QDRANT|CLICKHOUSE' || true
-
-# check qdrant reachability from the image
-docker compose run --rm --entrypoint sh wren-ai-service -c 'nc -zq2 qdrant 6333 && echo qdrant_ok || echo qdrant_fail'
+[root@cheux37oracleos7 kcg]# docker run --rm --entrypoint env wren-ai-service | egrep -i 'WREN_AI_SERVICE_PORT|QDRANT|CLICKHOUSE' || true
+Unable to find image 'wren-ai-service:latest' locally
+docker: Error response from daemon: pull access denied for wren-ai-service, repository does not exist or may require 'docker login': denied: requested access to the resource is denied.
+See 'docker run --help'.
+[root@cheux37oracleos7 kcg]# docker run --rm --entrypoint sh wren-ai-service -c 'nc -zq2 qdrant 6333 && echo qdrant_ok || echo qdrant
+_fail'
+Unable to find image 'wren-ai-service:latest' locally
+docker: Error response from daemon: pull access denied for wren-ai-service, repository does not exist or may require 'docker login': denied: requested access to the resource is denied.
+See 'docker run --help'.
+[root@cheux37oracleos7 kcg]#
